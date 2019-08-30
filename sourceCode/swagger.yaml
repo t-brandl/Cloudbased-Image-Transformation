@@ -1,0 +1,67 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a sample Cloudbased Image transformation Service.  You can\
+    \ use it here: [https://t-brandl.github.io/](https://t-brandl.github.io/)"
+  version: "1.0.0"
+  title: "Cloudbased Image Transformation"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "petstore.swagger.io"
+basePath: "/CIT"
+tags:
+- name: "transform"
+  description: "Available transformation methods"
+schemes:
+- "https"
+- "http"
+paths:
+  /transform:
+    post:
+      tags:
+      - "transform"
+      summary: "Modifies the image with a given filter criteria"
+      description: ""
+      operationId: "transform"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "json"
+        description: "Request for the image to be transformed"
+        required: true
+        schema:
+          $ref: "#/definitions/transform"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            type: "object"
+            properties:
+              statusCode:
+                type: "integer"
+                example: 200
+              image:
+                type: "string"
+                example: "byte64 encoded image"
+        405:
+          description: "Invalid input. Either not an image or no url"
+definitions:
+  transform:
+    type: "object"
+    required:
+    - "image_url"
+    - "selected_mode"
+    properties:
+      selected_mode:
+        type: "integer"
+        example: 1
+      scale:
+        type: "integer"
+        example: 2
+      image_url:
+        type: "string"
+        example: "https://i.imgur.com/J4OKX3q.png"

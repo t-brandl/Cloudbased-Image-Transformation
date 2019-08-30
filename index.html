@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Cloudbased Image Transformation</title>
+    <LINK href="styles.css" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="index.js" async></script>
+  </head>
+  <body>
+    <div class = "header">
+      <h2 id="top">Cloudbased Image Transformation</h2>
+    </div>
+    <div class="topnav">
+      <button onclick=blackwhite() alt="Black and White Filter" id="bw">Black and White Filter</a>
+      <button onclick=upscale() alt="Upscale Image" id="us">Upscale Image</a>
+      <button onclick=cartoonify() alt="Cartoon Filter" id="cf">Cartoon Filter</a>
+    </div>
+      
+    <div class="content">
+      <div>
+        <div>
+            <div id="image_selection">
+            <h3>Image URL:</h3>
+             <input name="Image Link" id="image_url" type="url" autocomplete="on">
+           </div>
+            <div style="padding:15px"></div>
+            <div id="scale_select">
+              <h3>Select a Value for the Scale Multiplier:</h3>
+              <input type="radio" name="scale" value="2" checked> 2x<br>
+              <input type="radio" name="scale" value="3"> 3x<br>
+              <input type="radio" name="scale" value="4"> 4x<br>
+            </div>
+            <div style="padding:15px"></div>
+            <button onclick=postRequest() alt="Confirm" id="confirm">Confirm</button>
+          </div>
+      </div>
+      <div id="result" class="content">
+        <h4>Result:</h4>
+        <img id="ItemPreview" style="width:100%;height:100%"></img>
+        <h4 id="Failed" style="color: red"></h4>
+      </div>
+      <div class="content" id="bw_example">
+        <h3>Black and White Filter Example:</h3>
+        <div class="content">
+          <h4>Original Image:</h4>
+          <img src="images/JohannesPlenioForrest.jpg" alt="Picture of a house at the end of a road in a forrest by Johannes Plenio" style="width:512px;height:512px"></img>
+        </div>
+        <div class="content">
+          <h4>Black and White Image:</h4>
+          <img src="images/JohannesPlenioForrestBW.png" alt="Picture of a house at the end of a road in a forrest by Johannes Plenio" style="width:512px;height:512px"></img>
+        </div>
+      </div>
+      <div class="content" id="us_example">
+          <h3>Upscale Example:</h3>
+          <div class="content">
+            <h4>Original Image:</h4>
+            <img src="images/JohannesPlenioForrest.jpg" alt="Picture of a house at the end of a road in a forrest by Johannes Plenio" style="width:256px;height:256px"></img>
+          </div>
+          <div class="content">
+            <h4>2x upscaled Image:</h4>
+            <img src="images/JohannesPlenioForrest2.png" alt="2x upscaled version of it." style="width:512px;height:512px"></img>
+          </div>
+          <div class="content">
+              <h4>4x upscaled Image:</h4>
+              <img src="images/JohannesPlenioForrest4.png" alt="4x upscaled version of it." style="width:1024px;height:1024px"></img>
+          </div>
+      </div>
+      <div class="content" id="cf_example">
+          <h3>Cartoon Filter Example:</h3>
+          <div class="content">
+            <h4>Original Image:</h4>
+           <img src="images/HelenaLopes.jpg" alt="Picture of three dogs in a basket by Helena Lopes" style="width:512px;height:512px"></img>
+          </div>
+          <div class="content">
+            <h4>Applied Cartoon Filter:</h4>
+            <img src="images/HelenaLopesCartoon.png" alt="Cartoon transformed version of it." style="width:512px;height:512px"></img>
+          </div>
+        </div>
+    </div>
+
+  </body>
+</html>
