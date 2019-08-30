@@ -14,7 +14,7 @@ Main executable file is [cloudbasedImageTransformation.py](https://github.com/t-
 
 # Requirements
 Python 3.7.2+ *(If the python code is to be run locally, the libraries Pillow and numpy are needed)*
-
+node.js, including the modules `express`, `request` and `cors`
 IBM Cloud Account
 
 ## How to use it 
