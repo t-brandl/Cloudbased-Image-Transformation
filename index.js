@@ -3,13 +3,11 @@ const apiUrl = 'http://localhost:2017';
 
   function getScaleMultiplier(){
     let radios = document.getElementsByName('scale');
-    let scale_multiplier = 2;
-
     for (var i = 0, length = radios.length; i < length; i++)
     {
       if (radios[i].checked)
       {
-        return scale_multiplier = radios[i].value;
+        return parseInt(radios[i].value);
       }
     }
   }
@@ -58,7 +56,7 @@ const apiUrl = 'http://localhost:2017';
 
   function postRequest(){
     let url = document.getElementById("image_url").value;
-    let scale_mode = getScaleMultiplier();
+    let scale_multiplier = getScaleMultiplier();
     document.getElementById("result").style.display = "none";
     document.getElementById("Failed").innerHTML = " ";
     document.getElementById("ItemPreview").src = " ";
@@ -73,16 +71,17 @@ const apiUrl = 'http://localhost:2017';
       contentType:'application/json',
       data: JSON.stringify({
         "selected_mode" : selected_mode, 
-        "scale" : scale_mode, 
+        "scale" : scale_multiplier, 
         "image_url": url
       }),
       success: function(data){
+        document.getElementById("result").style.display = "block";
         if(data.statusCode === 200) {
-          document.getElementById("result").style.display = "block";
           document.getElementById("ItemPreview").src = data.image; 
+        } else if(data.statusCode === 400) {
+          document.getElementById("Failed").innerHTML = data.statusCode + " : The action produced a response that exceeded the allowed length of 5242880 bytes.";
         } else {
-          document.getElementById("result").style.display = "block";
-          document.getElementById("Failed").innerHTML = "ErrorCode " + data.statusCode + ": " + data.message;
+          document.getElementById("Failed").innerHTML = "ErrorCode " + data.statusCode + " : " + data.message;
         }
       },
       error: function(textStatus, errorThrown ){

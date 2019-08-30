@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 
 // Link to your API Url here
-const apiUrl = '<post your url in here>';
+const apiUrl = '<insert your url here>';
 
 
 app.use(cors());

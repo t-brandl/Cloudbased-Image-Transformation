@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
-import sys
 import urllib.request as urllib
 import numpy as np
 import base64
-import math
 import requests
 from PIL import Image, ImageFilter, ImageMath
-from scipy import ndimage
 from io import BytesIO
-#import tensorflow as tf
-#import styletransfer as st
 
 
 # downloads the image, converts it to a NumPy array, and then reads
-# it into OpenCV format
+#
+# @param url the url to be used
+#
+# it into PIL Image format
 def url_to_image(url):
     response = requests.get(url)
     return Image.open(BytesIO(response.content))
@@ -107,6 +105,7 @@ def bradley_roth_numpy(image, s=None, t=None):
     # Also convert back to uint8
     out = 255*np.reshape(out, (rows, cols)).astype(np.uint8)
     return Image.fromarray(out)
+
 #
 # This method converts an Image into a Cartoon Version
 #
@@ -137,7 +136,7 @@ def cartoonify(image):
 #
 # @param url is the url
 #
-# @return True is it's valid, False if it isn't
+# @return True if it's valid, False if it isn't
 #
     
 def url_valid(url):
@@ -172,23 +171,29 @@ def image_valid(url):
 # @return Either an Image as Byte64 with statusCode 200
 #         or statusCode 405 with error message
 #
-def transformationService(args):
-    if not url_valid(args.get("image_url")):
-        response = {"body": {"statusCode": 405, "message" : "URL is not valid"}, "headers": {"Content-Type": "application/json", 'Access-Control-Allow-Origin':'*' , "Access-Control-Allow-Methods": ["POST", "GET", "OPTIONS"]}}
-        return response
-    if not image_valid(args.get("image_url")):
-        response = {"body": {"statusCode": 405, "message" : "Image needs to be a jpg or png"}, "headers": {"Content-Type": "application/json", 'Access-Control-Allow-Origin':'*' , "Access-Control-Allow-Methods": ["POST", "GET", "OPTIONS"]}}
-        return response
-    img = url_to_image(args.get("image_url", 0))
+def transformation_service(args):
+    img_url = args.get("image_url", "")
     selected_mode = args.get("selected_mode", 0)
+    scale = args.get("scale", 1)
+    if not url_valid(img_url):
+        response = {"statusCode": 405, "message" : "URL is not valid"}
+        return response
+    if not image_valid(img_url):
+        response = {"statusCode": 405, "message" : "Image needs to be a jpg or png"}
+        return response
+    img = url_to_image(img_url)
     if(selected_mode == 1):
         newimg = blackwhite(img)
     elif (selected_mode == 2):
-        newimg = upscale(img, args.get("scale", 1))
+        if 1 <= scale <= 4:
+            newimg = upscale(img, scale)
+        else:
+            response = {"statusCode": 405, "message" : "Scale is not a value between 1 and 4"}
+            return response
     elif (selected_mode == 3):
         newimg = cartoonify(img)
     else:
-        response = {"body": {"statusCode": 405, "message": "Not a valid mode selected"}, "headers": {"Content-Type": "application/json", 'Access-Control-Allow-Origin':'*' , "Access-Control-Allow-Methods": ["POST", "GET", "OPTIONS"]}}
+        response = {"statusCode": 405, "message": "Not a valid mode selected"}
         return response
     
     #returns image as byte64 inside the json
@@ -200,7 +205,7 @@ def transformationService(args):
         # Python 3, decode from bytes to string
         image_data = image_data.decode()
     data_url = 'data:image/png;base64,' + image_data
-    response = {"body": {"statusCode": 200, "image": data_url}, "headers": {"Content-Type": "application/json", 'Access-Control-Allow-Origin':'*' , "Access-Control-Allow-Methods": ["POST", "GET", "OPTIONS"]}}
+    response = {"statusCode": 200, "image": data_url}
     return response
 
 # This main method will be invoked when this program is run
@@ -209,4 +214,5 @@ def transformationService(args):
 #        which must be a JSON object.
 #           
 def main(args):
-    return transformationService(args)
+    response = transformation_service(args)
+    return response
